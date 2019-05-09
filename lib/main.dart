@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:async/async.dart';
 import 'dart:convert';
+import 'package:conversor/key.dart';
 
-const request = "https://api.hgbrasil.com/finance?format=json&key=";
+const request = "https://api.hgbrasil.com/finance?format=json&key=$key";
 
 void main() async {
 

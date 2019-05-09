@@ -27,6 +27,9 @@
 .pub/
 /build/
 
+# Project related
+**/lib/key.dart
+
 # Android related
 **/android/**/gradle-wrapper.jar
 **/android/.gradle
@@ -35,6 +38,8 @@
 **/android/gradlew.bat
 **/android/local.properties
 **/android/**/GeneratedPluginRegistrant.java
+
+
 
 # iOS/XCode related
 **/ios/**/*.mode1v3
