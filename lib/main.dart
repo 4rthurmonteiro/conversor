@@ -32,8 +32,44 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
+  final realController = TextEditingController();
+  final dolarController = TextEditingController();
+  final euroController = TextEditingController();
+  final libraController = TextEditingController();
+
   double dolar;
   double euro;
+  double libra;
+
+  void _realChanged(String text){
+    double real = double.parse(text);
+    dolarController.text = (real/dolar).toStringAsFixed(2);
+    euroController.text = (real/euro).toStringAsFixed(2);
+    libraController.text = (real/libra).toStringAsFixed(2);
+  }
+
+  void _dolarChanged(String text){
+    double dolar = double.parse(text);
+    realController.text = (dolar * this.dolar).toStringAsFixed(2);
+    euroController.text = (dolar * this.dolar /euro).toStringAsFixed(2);
+    libraController.text = (dolar * this.dolar/libra).toStringAsFixed(2);
+  }
+
+  void _euroChanged(String text){
+    double euro = double.parse(text);
+    realController.text = (euro * this.euro).toStringAsFixed(2);
+    dolarController.text = (euro * this.euro / dolar).toStringAsFixed(2);
+    libraController.text = (euro * this.euro/libra).toStringAsFixed(2);
+  }
+
+  void _libraChanged(String text){
+    double libra = double.parse(text);
+    realController.text = (libra * this.libra).toStringAsFixed(2);
+    dolarController.text = (libra * this.libra / dolar).toStringAsFixed(2);
+    euroController.text = (libra * this.libra / euro).toStringAsFixed(2);
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +108,7 @@ class _HomeState extends State<Home> {
 
                 dolar = snapshot.data["results"]["currencies"]["USD"]["buy"];
                 euro = snapshot.data["results"]["currencies"]["EUR"]["buy"];
+                libra = snapshot.data["results"]["currencies"]["GBP"]["buy"];
 
                 return SingleChildScrollView(
                   padding: EdgeInsets.all(10),
@@ -79,44 +116,13 @@ class _HomeState extends State<Home> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
                       Icon(Icons.monetization_on, size: 120, color: Colors.amber),
-                      TextField(
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          labelText: 'Real',
-                          prefixText: 'R\$',
-                          labelStyle: TextStyle(color: Colors.amber),
-                          border: OutlineInputBorder()
-                        ),
-                        style: TextStyle(
-                          color: Colors.amber, fontSize: 25
-                        ),
-                      ),
+                      buildText('Real', 'R\$', realController, _realChanged),
                       Divider(),
-                      TextField(
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                            labelText: 'Dólar',
-                            prefixText: 'USD',
-                            labelStyle: TextStyle(color: Colors.amber),
-                            border: OutlineInputBorder()
-                        ),
-                        style: TextStyle(
-                            color: Colors.amber, fontSize: 25
-                        ),
-                      ),
+                      buildText('Dólar', 'USD', dolarController, _dolarChanged),
                       Divider(),
-                      TextField(
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                            labelText: 'Euro',
-                            prefixText: 'EUR',
-                            labelStyle: TextStyle(color: Colors.amber),
-                            border: OutlineInputBorder()
-                        ),
-                        style: TextStyle(
-                            color: Colors.amber, fontSize: 25
-                        ),
-                      )
+                      buildText('Euro', 'EUR', euroController, _euroChanged),
+                      Divider(),
+                      buildText('Libra', 'GBP', libraController, _libraChanged)
                     ],
                   ),
                 );
@@ -124,6 +130,23 @@ class _HomeState extends State<Home> {
           }
         },
       ),
+    );
+  }
+
+  Widget buildText(String label, String prefix, TextEditingController c, Function f){
+    return TextField(
+      controller: c,
+      keyboardType: TextInputType.number,
+      decoration: InputDecoration(
+          labelText: label,
+          prefixText: prefix + ' ',
+          labelStyle: TextStyle(color: Colors.amber),
+          border: OutlineInputBorder()
+      ),
+      style: TextStyle(
+          color: Colors.amber, fontSize: 25
+      ),
+      onChanged: f,
     );
   }
 }
